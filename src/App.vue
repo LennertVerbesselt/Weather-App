@@ -13,7 +13,10 @@
         </div>
         <div class="weather-box">
           <div class="temp">{{Math.round(weather.main.temp)}} °C</div>
-          <div class="weather">{{weather.weather[0].main}}</div>
+          <div class="weather">{{weather.weather[0].description}}</div>
+          <div class="feels-like">Feels like:  {{weather.main.feels_like }}°C </div>
+          <div class="min-max">Min: {{weather.main.temp_min}}°C / Max: {{weather.main.temp_max}}°C</div>
+          <div class="pressure">Pressure: {{weather.main.pressure}} hPa</div>
         </div>
       </div>
     </main>
@@ -155,6 +158,7 @@ main {
 }
 .weather-box {
   text-align: center;
+  color: #FFF;
 }
 .weather-box .temp {
   display: inline-block;
@@ -174,5 +178,20 @@ main {
   font-weight: 700;
   font-style: italic;
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
+}
+
+.weather-box .feels-like {
+  font-size: 28px;
+  margin: 30px 0px;
+}
+
+.weather-box .min-max {
+  font-size: 28px;
+  margin: 30px 0px;
+}
+
+.weather-box .pressure {
+  font-size: 28px;
+  margin: 30px 0px;
 }
 </style>
