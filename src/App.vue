@@ -1,9 +1,10 @@
 <template>
-  <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''">
+  <div  id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''">
     <main>
       <div class="search-box">
-        <input @keypress="fetchWeather" v-model="query" type="text" name="" class="search-bar" placeholder="Search..."/> 
+        <input @keypress="fetchWeather" v-model="query" type="text" name="" class="search-bar" placeholder="Search..."/> {{currentLocation}} 
       </div>
+      
 
       <div class="weather-wrap" v-if="typeof weather.main != 'undefined'">
         <div class="location-box">
@@ -21,7 +22,6 @@
 
 <script>
 
-
 export default {
   name: 'app',
   data () {
@@ -29,9 +29,11 @@ export default {
       api_key: '240acc8bf68f17c3f0215e3047a4cc83',
       url_base: 'https://api.openweathermap.org/data/2.5/',
       query: '',
+      currentLocation: '',
       weather: {}
     }
   },
+  
   methods: {
     fetchWeather (e) {
       if(e.key == "Enter") {
@@ -41,9 +43,7 @@ export default {
       }
     },
  
-    setResults(results) {
-      this.weather = results;
-    },
+    
 
     dateBuilder() {
       let d = new Date();
@@ -54,8 +54,39 @@ export default {
       let month = months[d.getMonth()];
       let year = d.getFullYear();
       return `${day} ${date} ${month} ${year}`;
-    }
-  }
+    },
+
+    getLocation() {
+      if(navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.getWeatherForCurrentLocation);
+      }
+    },
+
+    getWeatherForCurrentLocation(position) {
+      var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            fetch(`${this.url_base}weather?lat=${lat}&lon=${lon}&units=metric&appid=${this.api_key}`).then(res => {
+              return res.json();
+            }).then(this.setResults);
+    },
+
+    setResults(results) {
+      this.weather = results;
+    },
+
+
+  },
+  mounted() {
+
+    this.getLocation();
+
+  },
+
+  created() {
+    
+  },
+
   
 }
 </script>
